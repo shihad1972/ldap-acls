@@ -1,0 +1,5 @@
+---
+# tasks file for ldap-acls
+
+- import_tasks: admins.yml
+- import_tasks: acls.yml

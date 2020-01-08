@@ -1,0 +1,9 @@
+---
+
+- name: Add the LDAP ACLs
+  become: true
+  ldap_attr:
+    dn: "olcDatabase={{ '{' }}{{ ldap_db_number }}{{ '}' }}{{ ldap_dbtype|default('hdb') }},cn=config"
+    state: exact
+    name: olcAccess
+    values: "{{ ldap_acls }}"

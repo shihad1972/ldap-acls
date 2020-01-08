@@ -1,0 +1,38 @@
+---
+
+- name: Create container for the admins of the directory
+  ldap_entry:
+    dn: "ou={{ admin_rdn | default('admins') }},{{ domain_dn }}"
+    bind_dn: "cn={{ admin_dn | default('manager') }}, {{ domain_dn }}"
+    bind_pw: "{{ admin_password }}"
+    state: present
+    objectClass:
+      - top
+      - organizationalUnit
+    attributes:
+      ou: admins
+  when: admin_members is defined
+
+- name: Create group of admins
+  ldap_entry:
+    dn: "cn={{ admin_group }},ou={{ admin_rdn | default('admins') }},{{ domain_dn }}"
+    bind_dn: "cn={{ admin_dn | default('manager') }}, {{ domain_dn }}"
+    bind_pw: "{{ admin_password }}"
+    state: present
+    objectClass:
+      - groupOfNames
+    attributes:
+      cn: diradmins
+      description: List of Directory Admins
+      member: "{{ admin_members[0] }}"
+  when: admin_members is defined
+
+- name: Add admins to group
+  ldap_attr:
+    dn: "cn={{ admin_group }},ou={{ admin_rdn | default('admins') }},{{ domain_dn }}"
+    bind_dn: "cn={{ admin_dn | default('manager') }}, {{ domain_dn }}"
+    bind_pw: "{{ admin_password }}"
+    state: exact
+    name: member
+    values: "{{ admin_members }}"
+  when: admin_members is defined

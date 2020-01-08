@@ -9,3 +9,4 @@ ldap_acls:
   - "{0}to attrs=userPassword,shadowLastChange,userPKCS12 by self write by anonymous auth by * none"
   - "{1}to * by * read"
 admin_group: diradmins
+admin_rdn: admins

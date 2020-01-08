@@ -10,7 +10,7 @@
       - top
       - organizationalUnit
     attributes:
-      ou: admins
+      ou: "{{ admin_rdn }}"
   when: admin_members is defined
 
 - name: Create group of admins
@@ -22,7 +22,7 @@
     objectClass:
       - groupOfNames
     attributes:
-      cn: diradmins
+      cn: "{{ admin_group }}"
       description: List of Directory Admins
       member: "{{ admin_members[0] }}"
   when: admin_members is defined
